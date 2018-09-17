@@ -8,16 +8,29 @@ import FileSync from 'lowdb/adapters/FileSync'
 import tp from 'timeproxy'
 import Parser from 'rss-parser'
 import RSS from 'rss'
+import Maybe, {Just, Nothing} from 'folktale/maybe'
 
 pexecFile = util.promisify(execFile)
 pwriteFile = util.promisify(writeFile)
 
 ytChannelFeed = 'https://www.youtube.com/feeds/videos.xml?channel_id=UC3s0BtrBJpwNDaflRSoiieQ'
-defaultYTdLparams = ['--restrict-filenames','-f bestaudio']
 projectPath = path.resolve(__dirname, '..')
-youtubedlBinaryPath = path.join(projectPath, 'youtube-dl-binary', `youtube-dl`)
+youtubedlBinaryPath = path.join(projectPath, 'youtube-dl-binary', 'youtube-dl')
 dbPath = path.join(projectPath, 'db', 'db.json')
 feedFilePath = path.join(projectPath, 'feed', 'feed.xml')
+defaultFeedProperties = {
+  title: 'ThreatWire',
+  image_url: 'https://www.hak5.org/wp-content/uploads/2016/04/logo_black_small.png',
+}
+type TwVideos = Array<TwVideo>;
+type TwVideo = {
+  title: string,
+  link: string,
+  pubDate: string,
+  author: string,
+  id: string,
+  isoDate: string
+};
 
 db = low(new FileSync(dbPath))
 feedParser = new Parser()
@@ -26,34 +39,53 @@ db.defaults({ lastVideoPublishDate: 'Never'}).write()
 
 getNewTWvideos() ->
   feedParser.parseURL(ytChannelFeed)
-   .then(({items: videos}) ->
-    twVideos = videos.filter(video -> video.title.toLowerCase().includes('threatwire'))
-    if !twVideos.length: return
-    if db.get('lastVideoPublishDate').value() === twVideos[0].pubDate: return twVideos
+    .then(getTWvideosFromFeed)
+    .then(downloadNewVideo)
+    .then(updateRSSfeed)
+    .catch(e -> console.error(e))
 
-    db.set('lastVideoPublishDate', twVideos[0].pubDate).write()
-    return pexecFile(youtubedlBinaryPath, [twVideos[0].link, ...defaultYTdLparams])
+getTWvideosFromFeed({items: videos}:{videos: TwVideos}):TwVideos ->
+  videos.filter(video -> video.title.toLowerCase().includes('threatwire'))
+
+shouldDownloadVideo(twVideos:TwVideos):boolean ->
+  if ISDEV: return true
+  twVideos.length && db.get('lastVideoPublishDate').value() !== twVideos[0].pubDate
+
+downloadNewVideo(twVideos:TwVideos):Nothing|Promise<Just<TwVideos>> ->  // eslint-disable-line fp/no-nil
+  match twVideos:
+    | !~shouldDownloadVideo(): Maybe.Nothing()
+    | else:
+      mostRecentVideo = twVideos[0]
+      updateDBwithMostRecentDownload(mostRecentVideo)
+      saveFilePath = path.join('audioFiles', `${ mostRecentVideo.id.slice(9) }.webm`)
+      pexecFile(
+        youtubedlBinaryPath,
+        [
+          mostRecentVideo.link,
+          `-o${ saveFilePath }`,
+          '-f bestaudio'
+        ]
+      )
       .then(result -> console.log(result))
-      .then(() -> twVideos)
+      .then(() -> Maybe.Just(twVideos))
 
-   )
-   .then(twVideos ->
-      feed = new RSS({
-        title: 'ThreatWire',
-        image_url: 'https://www.hak5.org/wp-content/uploads/2016/04/logo_black_small.png',
-      })
-      twVideos.forEach(video => {
+updateDBwithMostRecentDownload(mostRecentVideo:TwVideo) ->
+  db.set('lastVideoPublishDate', mostRecentVideo.pubDate).write()
+
+updateRSSfeed(twVideos:Just<TwVideos>) ->  // eslint-disable-line fp/no-nil
+  match twVideos:
+    | Just:
+      feed = new RSS(defaultFeedProperties)
+      twVideos.getOrElse([]).forEach(video ->
         feed.item({
           title: video.title,
           guid: video.id,
-          url: video.link,
-          date: video.isoDate,
+          url: video.link,  //TODO:need to change this to be the url+folderPath of the site
+          date: video.pubDate,
         })
-      })
-      feed.xml()
-   )
-   .then(feed -> pwriteFile(feedFilePath, feed))
-   .catch(e -> console.error(e))
+      )
+      pwriteFile(feedFilePath, feed.xml({indent: true}))
+      console.log('RSS Feed xml file updated')
 
 setInterval(getNewTWvideos, tp.ONE_DAY)
 getNewTWvideos()
