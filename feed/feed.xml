@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>
+            <![CDATA[ThreatWire]]>
+        </title>
+        <description>
+            <![CDATA[ThreatWire]]>
+        </description>
+        <link>http://github.com/dylang/node-rss</link>
+        <image>
+            <url>https://www.hak5.org/wp-content/uploads/2016/04/logo_black_small.png</url>
+            <title>ThreatWire</title>
+            <link></link>
+        </image>
+        <generator>RSS for Node</generator>
+        <lastBuildDate>Mon, 17 Sep 2018 07:00:09 GMT</lastBuildDate>
+        <item>
+            <title>
+                <![CDATA[Hacker Charged for Sony and WannaCry Hacks - ThreatWire]]>
+            </title>
+            <link>https://www.youtube.com/watch?v=UAXWFX0huM8</link>
+            <guid isPermaLink="false">yt:video:UAXWFX0huM8</guid>
+            <pubDate>Tue, 11 Sep 2018 15:00:09 GMT</pubDate>
+        </item>
+        <item>
+            <title>
+                <![CDATA[Fortnite Rewards for 2FA, T-Mobile Hacked, and Apache Struts Vulnerable to Hacks - ThreatWire]]>
+            </title>
+            <link>https://www.youtube.com/watch?v=Hov9LKSSmO4</link>
+            <guid isPermaLink="false">yt:video:Hov9LKSSmO4</guid>
+            <pubDate>Wed, 29 Aug 2018 20:15:00 GMT</pubDate>
+        </item>
+        <item>
+            <title>
+                <![CDATA[DEF CON 26: Voting Machines Hacked by Kids! - ThreatWire]]>
+            </title>
+            <link>https://www.youtube.com/watch?v=mHm0yle6GBI</link>
+            <guid isPermaLink="false">yt:video:mHm0yle6GBI</guid>
+            <pubDate>Wed, 15 Aug 2018 22:00:05 GMT</pubDate>
+        </item>
+        <item>
+            <title>
+                <![CDATA[Steal One Billion Euros? Get Arrested  - ThreatWire]]>
+            </title>
+            <link>https://www.youtube.com/watch?v=OpFYA-Xfx9U</link>
+            <guid isPermaLink="false">yt:video:OpFYA-Xfx9U</guid>
+            <pubDate>Tue, 07 Aug 2018 15:00:04 GMT</pubDate>
+        </item>
+        <item>
+            <title>
+                <![CDATA[23andMe Sells Your Data, Google Announces Titan  - ThreatWire]]>
+            </title>
+            <link>https://www.youtube.com/watch?v=oK0kj6lJpQM</link>
+            <guid isPermaLink="false">yt:video:oK0kj6lJpQM</guid>
+            <pubDate>Tue, 31 Jul 2018 15:00:04 GMT</pubDate>
+        </item>
+        <item>
+            <title>
+                <![CDATA[Vulnerable Election Systems, and Venmo is Public by Default - ThreatWire]]>
+            </title>
+            <link>https://www.youtube.com/watch?v=yXXKo8hgmuc</link>
+            <guid isPermaLink="false">yt:video:yXXKo8hgmuc</guid>
+            <pubDate>Tue, 24 Jul 2018 15:00:06 GMT</pubDate>
+        </item>
+        <item>
+            <title>
+                <![CDATA[Fortnite Hackers Get Hacked, Mapping Public Fitness Data on Polar - ThreatWire]]>
+            </title>
+            <link>https://www.youtube.com/watch?v=MuV2nzjiKkM</link>
+            <guid isPermaLink="false">yt:video:MuV2nzjiKkM</guid>
+            <pubDate>Tue, 10 Jul 2018 15:00:06 GMT</pubDate>
+        </item>
+        <item>
+            <title>
+                <![CDATA[California’s New Privacy Bill, Exactis Leak, & Gentoo Guthub Hacked - ThreatWire]]>
+            </title>
+            <link>https://www.youtube.com/watch?v=hqCc7cE3sn4</link>
+            <guid isPermaLink="false">yt:video:hqCc7cE3sn4</guid>
+            <pubDate>Wed, 04 Jul 2018 00:00:02 GMT</pubDate>
+        </item>
+    </channel>
+</rss>
