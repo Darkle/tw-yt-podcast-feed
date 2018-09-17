@@ -176,8 +176,9 @@ function getNewTWvideos() {
     return _maybe2.default.Nothing();
   } else {
     var mostRecentVideo = twVideos[0];
-    updateDBwithMostRecentDownload(mostRecentVideo);
     var saveFilePath = _path2.default.join('audioFiles', mostRecentVideo.id.slice(9) + '.webm');
+
+    updateDBwithMostRecentDownload(mostRecentVideo);
     return pexecFile(youtubedlBinaryPath, [mostRecentVideo.link, '-o' + saveFilePath, '-f bestaudio']).then(function (result) {
       return console.log(result);
     }).then(function () {

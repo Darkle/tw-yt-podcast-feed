@@ -56,8 +56,9 @@ downloadNewVideo(twVideos:TwVideos):Nothing|Promise<Just<TwVideos>> ->  // eslin
     | !~shouldDownloadVideo(): Maybe.Nothing()
     | else:
       mostRecentVideo = twVideos[0]
-      updateDBwithMostRecentDownload(mostRecentVideo)
       saveFilePath = path.join('audioFiles', `${ mostRecentVideo.id.slice(9) }.webm`)
+
+      updateDBwithMostRecentDownload(mostRecentVideo)
       pexecFile(
         youtubedlBinaryPath,
         [
