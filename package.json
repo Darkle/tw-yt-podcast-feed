@@ -16,7 +16,6 @@
     "@babel/preset-env": "^7.1.0",
     "@lightscript/babel-preset": "^4.0.0-alpha.12",
     "@lightscript/eslint-plugin": "^4.0.0-alpha.12",
-    "@lightscript/runtime": "^0.1.1",
     "cross-env": "^5.2.0",
     "eslint": "^5.6.0",
     "eslint-plugin-fp": "^2.3.0",
@@ -28,6 +27,7 @@
     "rollup-plugin-replace": "^2.0.0"
   },
   "dependencies": {
+    "@lightscript/runtime": "^0.1.1",
     "express": "^4.16.3",
     "folktale": "^2.3.0",
     "http": "0.0.0",
