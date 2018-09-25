@@ -1,27 +1,19 @@
 import util from 'util'
-import { writeFile } from 'fs'
 import path from 'path'
 import { execFile } from 'child_process'
 
-import low from 'lowdb'
-import FileSync from 'lowdb/adapters/FileSync'
-import tp from 'timeproxy'
 import Parser from 'rss-parser'
-import RSS from 'rss'
 import Maybe, {Just, Nothing} from 'folktale/maybe'
 
+import { updateRSSfeed } from './updateFeed.lsc'
+import { getDB, updateDBwithMostRecentDownload } from './db.lsc'
+
 pexecFile = util.promisify(execFile)
-pwriteFile = util.promisify(writeFile)
 
 ytChannelFeed = 'https://www.youtube.com/feeds/videos.xml?channel_id=UC3s0BtrBJpwNDaflRSoiieQ'
 projectPath = path.resolve(__dirname, '..')
 youtubedlBinaryPath = path.join(projectPath, 'youtube-dl-binary', 'youtube-dl')
-dbPath = path.join(projectPath, 'db', 'db.json')
-feedFilePath = path.join(projectPath, 'feed', 'feed.xml')
-defaultFeedProperties = {
-  title: 'ThreatWire',
-  image_url: 'https://www.hak5.org/wp-content/uploads/2016/04/logo_black_small.png',
-}
+
 type TwVideos = Array<TwVideo>;
 type TwVideo = {
   title: string,
@@ -32,10 +24,7 @@ type TwVideo = {
   isoDate: string
 };
 
-db = low(new FileSync(dbPath))
 feedParser = new Parser()
-
-db.defaults({ lastVideoPublishDate: 'Never'}).write()
 
 getNewTWvideos() ->
   feedParser.parseURL(ytChannelFeed)
@@ -69,25 +58,10 @@ downloadNewVideo(twVideos:TwVideos):Nothing|Promise<Just<TwVideos>> ->  // eslin
 
 shouldDownloadVideo(twVideos:TwVideos):boolean ->
   if ISDEV: return true
-  twVideos.length && db.get('lastVideoPublishDate').value() !== twVideos[0].pubDate
+  twVideos.length && getDB().get('lastVideoPublishDate').value() !== twVideos[0].pubDate
 
-updateDBwithMostRecentDownload(mostRecentVideo:TwVideo) ->
-  db.set('lastVideoPublishDate', mostRecentVideo.pubDate).write()
+export {
+  getNewTWvideos
+}
 
-updateRSSfeed(twVideos:Just<TwVideos>) ->  // eslint-disable-line fp/no-nil
-  match twVideos:
-    | Just:
-      feed = new RSS(defaultFeedProperties)
-      twVideos.getOrElse([]).forEach(video ->  // eslint-disable-line fp/no-nil
-        feed.item({
-          title: video.title,
-          guid: video.id,
-          url: video.link,  //TODO:need to change this to be the url+folderPath of the site
-          date: video.pubDate,
-        })
-      )
-      pwriteFile(feedFilePath, feed.xml({indent: true}))
-      console.log('RSS Feed xml file updated')
 
-setInterval(getNewTWvideos, tp.ONE_DAY)
-getNewTWvideos()

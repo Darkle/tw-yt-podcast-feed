@@ -1,0 +1,42 @@
+import path from 'path'
+import util from 'util'
+import { writeFile } from 'fs'
+
+import {Just} from 'folktale/maybe'
+import RSS from 'rss'
+
+pwriteFile = util.promisify(writeFile)
+
+type TwVideos = Array<TwVideo>;
+type TwVideo = {
+  title: string,
+  link: string,
+  pubDate: string,
+  author: string,
+  id: string,
+  isoDate: string
+};
+feedFilePath = path.resolve(__dirname, '..', 'feed', 'feed.xml')
+defaultFeedProperties = {
+  title: 'ThreatWire',
+  image_url: 'https://www.hak5.org/wp-content/uploads/2016/04/logo_black_small.png',
+}
+
+updateRSSfeed(twVideos:Just<TwVideos>) ->  // eslint-disable-line fp/no-nil
+  match twVideos:
+    | Just:
+      feed = new RSS(defaultFeedProperties)
+      twVideos.getOrElse([]).forEach(video ->  // eslint-disable-line fp/no-nil
+        feed.item({
+          title: video.title,
+          guid: video.id,
+          url: video.link,  //TODO:need to change this to be the url+folderPath of the site
+          date: video.pubDate,
+        })
+      )
+      pwriteFile(feedFilePath, feed.xml({indent: true}))
+      console.log('RSS Feed xml file updated')
+
+export{
+  updateRSSfeed
+}

@@ -1,0 +1,32 @@
+// import http from 'http'
+
+// import tp from 'timeproxy'
+import express from 'express'
+
+// import { getNewTWvideos } from './downloadTW.lsc'
+// import { initDB } from './db.lsc'
+
+// app.set('port', process.env.PORT)
+// server = http.createServer(app)
+// server.listen(process.env.PORT)
+
+app = express()
+
+app.get('/', (req, res) => res.send('Hello World!'))
+
+app.listen(process.env.PORT, () => console.log(`Example app listening on port ${ process.env.PORT }!`))
+
+
+
+
+
+
+
+
+
+
+
+// initDB()
+
+// setInterval(getNewTWvideos, tp.ONE_DAY)
+// getNewTWvideos()

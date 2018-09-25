@@ -1,0 +1,30 @@
+import path from 'path'
+
+import low from 'lowdb'
+import FileSync from 'lowdb/adapters/FileSync'
+
+dbPath = path.resolve(__dirname, '..', 'db', 'db.json')
+type TwVideo = {
+  title: string,
+  link: string,
+  pubDate: string,
+  author: string,
+  id: string,
+  isoDate: string
+};
+let db = null // eslint-disable-line fp/no-let, fp/no-nil
+
+initDB() ->
+  now db = low(new FileSync(dbPath))  // eslint-disable-line fp/no-mutation
+  db.defaults({ lastVideoPublishDate: 'Never'}).write()
+
+getDB() -> db
+
+updateDBwithMostRecentDownload(mostRecentVideo:TwVideo) ->
+  db.set('lastVideoPublishDate', mostRecentVideo.pubDate).write()
+
+export {
+  initDB,
+  getDB,
+  updateDBwithMostRecentDownload
+}

@@ -1,9 +1,10 @@
 {
+  "main": "app/server-compiled.js",
   "scripts": {
     "rw": "cross-env NODE_ENV=development rollup -c -w",
     "debug": "cross-env NODE_ENV=development node --inspect-brk app/appMain-compiled.js ",
     "startDev": "cross-env NODE_ENV=development node app/appMain-compiled.js",
-    "start": "cross-env NODE_ENV=production rollup -c && node app/appMain-compiled.js"
+    "buildProd": "cross-env NODE_ENV=production rollup -c"
   },
   "name": "tw-yt-podcast-feed",
   "version": "0.0.1",
@@ -27,12 +28,12 @@
     "rollup-plugin-replace": "^2.0.0"
   },
   "dependencies": {
-    "feed": "^2.0.1",
+    "express": "^4.16.3",
     "folktale": "^2.3.0",
+    "http": "0.0.0",
     "lowdb": "^1.0.0",
     "rss": "^1.2.2",
     "rss-parser": "^3.4.3",
-    "timeproxy": "^1.2.1",
-    "youtube-dl": "^1.12.2"
+    "timeproxy": "^1.2.1"
   }
 }
