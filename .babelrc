@@ -1,18 +1,11 @@
 {
   "presets": [
     [
-      "@oigroup/babel-preset-lightscript",
+      "@lightscript",
       {
-        "stdlib": true,
-        "bangCall": false,
-        "safeCall": false,
-        "existential": true,
-        "noEnforcedSubscriptIndentation": true,
-        "useRequire": false,
-        "flippedImports": false,
-        "disableJsx": false,
-        "disableFlow": false,
-        "placeholderArgs": false
+        "env": {
+          "targets": { "node": "8.12.0" }
+        }
       }
     ]
   ]
